@@ -1,3 +1,8 @@
-const arr =[3,4,5,7,1,2,5,9];
-console.log(arr);
-console.warn(arr)
+const http=require('http');
+const data=require('./data');
+
+http.createServer((req,resp)=>{
+    resp.writeHead(200,{'Content-Type':'application\json'});
+    resp.write(JSON.stringify(data));
+    resp.end();
+}).listen(5000);                      
