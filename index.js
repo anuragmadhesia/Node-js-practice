@@ -11,7 +11,7 @@ const objData = JSON.parse(jsonData);
 var log=1;
 
 fss = fs.readFile('data.json','utf-8',(err,data)=>{
-    if(data==null){
+    if(data==null || data==''){
         fs.writeFile('data.json','['+jsonData+']',(err)=>{
             console.log('added 1st time');
         })
