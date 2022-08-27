@@ -1,22 +1,19 @@
-console.log('async-example1');
-let a = 5;
-let b = 0;
+const express = require('express');
+const app = express();
 
-// setTimeout(()=>{
-//     console.log('async-example2');
-//     b = 10;
-// },1000)
+app.get("", (req, resp) => {
+    console.log(req.query.name)
+    resp.send("Welcome,"+req.query.name);
+});
 
-let waitingData = new Promise((resolve,reject)=>{
-    setTimeout(()=>{
-        resolve(30);
-    },1000)
-})
+app.get("/about", (req, resp) => {
+    resp.send("Welcome, This is a About Page");
+});
 
-console.log('async-example3');
-waitingData.then((data)=>{
-    console.log('async-example2');
-    b=data;
-    console.log(a + b);
-})
-console.log(a + b);
+app.get("/help", (req, resp) => {
+    resp.send("Welcome, This is a Help Page");
+});
+
+app.listen(5000,()=>{
+ console.log(`Server is running at http://127.0.0.1:5000/`)
+});
