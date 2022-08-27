@@ -1,3 +1,16 @@
-const arr =[3,4,5,7,1,2,5,9];
-console.log(arr);
-console.warn(arr)
+const fs = require('fs');
+
+const input = process.argv;
+
+if(input[2]=='add')
+{
+    fs.writeFileSync(input[3],input[4])
+}
+else if(input[2]=='remove')
+{
+    fs.unlinkSync(input[3])
+}
+else
+{
+    console.log('Invalid Input')
+}
