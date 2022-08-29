@@ -1,19 +1,27 @@
 const express = require('express');
 const app = express();
+const reqFilter = (req, resp, next) => {
+    if (!req.query.age) {
+        resp.send("Please provide your age")
+    }
+    else if (req.query.age<18) {
+        resp.send("You are under aged")
+    }
+    else {
+        next();
+    }
+}
 
-app.get("", (req, resp) => {
-    console.log(req.query.name)
-    resp.send("Welcome,"+req.query.name);
+app.use(reqFilter);
+
+app.get('/', (res, resp) => {
+    resp.send('Welcome to Home page')
 });
 
-app.get("/about", (req, resp) => {
-    resp.send("Welcome, This is a About Page");
-});
-
-app.get("/help", (req, resp) => {
-    resp.send("Welcome, This is a Help Page");
+app.get('/users', (res, resp) => {
+    resp.send('Welcome to Users page')
 });
 
 app.listen(5000,()=>{
- console.log(`Server is running at http://127.0.0.1:5000/`)
+ console.log(`Server running at http://127.0.0.1:5000/`)
 });
