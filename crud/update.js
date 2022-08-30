@@ -1,4 +1,4 @@
-const dbConnect = require('./mongodb')
+const dbConnect = require('../config/mongodb')
 
 const updateData = async ()=>{
     let data = await dbConnect();

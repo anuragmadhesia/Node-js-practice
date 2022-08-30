@@ -1,7 +1,10 @@
-const dbConnect = require('./mongodb')
+const dbConnect = require('../config/mongodb')
 
 dbConnect().then((resp)=>{
-resp.find({name:'AWM'}).toArray().then((data)=>{
+// resp.find({name:'AKM'}).toArray().then((data)=>{
+//     console.log(data);
+// })
+resp.find().toArray().then((data)=>{
     console.log(data);
 })
 })
