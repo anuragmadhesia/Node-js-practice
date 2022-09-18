@@ -1,44 +1,40 @@
-const mongoose = require('mongoose');
+const express = require('express');
+require('./config');
+const Guns = require('./guns');
 
-mongoose.connect('mongodb://localhost:27017/node-practice');
-const productSchema = new mongoose.Schema({
-    name: String,
-    type: String,
-    size: Number
-});
+const app = express();
+app.use(express.json());
 
-const saveInDB = async () => {
-    const Product = mongoose.model('guns', productSchema);
-    let data = new Product({
-        name: "God gun",
-        type: 'gods weapon',
-        size: 200
-    });
-    const result = await data.save();
-    console.log(result);
-}
+app.get('/', async (req,res)=>{
+    let data = await Guns.find()
+    res.send(data);
+})
 
-const updateInDB =async  () => {
-    const Product = mongoose.model('guns', productSchema);
-    let data =await  Product.updateOne(
-        { name: "God gun" },
+app.delete('/delete/:_id', async (req,res)=>{
+    console.log(req.params);
+    let data = await Guns.deleteOne(req.params);
+    res.send('done');
+})
+
+app.put('/update/:_id', async (req,res)=>{
+    console.log(req.params);
+    let data = await Guns.updateOne(
+        //{}Condtions
+        //{$set updated data}
+        req.params,
         {
-            $set: { size: 550,name:'Brahmastra' }
+            $set:req.body
         }
-    )
-    console.log(data)
-}
+    );
+    res.send('done');
+})
 
-const deleteInDB = async ()=>{
-    const Product = mongoose.model('guns', productSchema);
-    let data = await Product.deleteOne({name:'Brahmastra'})
-    console.log(data);
-}
-const findInDB = async ()=>{
-    const Product = mongoose.model('guns', productSchema);
-    let data = await Product.find()
-    // let data = await Product.find({name:'AKM'})
-    console.log(data);
-}
+app.post('/create', async (req,res)=>{
+    let data = new Guns(req.body);
+    const result = await data.save();
+    res.send(result);
+})
 
-findInDB();
+app.listen(5000,()=>{
+    console.log('App running at http://127.0.0.1:5000/')
+})
