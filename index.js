@@ -5,34 +5,15 @@ const Guns = require('./guns');
 const app = express();
 app.use(express.json());
 
-app.get('/', async (req,res)=>{
-    let data = await Guns.find()
+app.get('/guns/:key', async (req,res)=>{
+    console.log(req.params.key);
+    let data = await Guns.find({
+        '$or':[
+            {'name':{$regex:req.params.key}},
+            {'type':{$regex:req.params.key}}
+        ]
+    })
     res.send(data);
-})
-
-app.delete('/delete/:_id', async (req,res)=>{
-    console.log(req.params);
-    let data = await Guns.deleteOne(req.params);
-    res.send('done');
-})
-
-app.put('/update/:_id', async (req,res)=>{
-    console.log(req.params);
-    let data = await Guns.updateOne(
-        //{}Condtions
-        //{$set updated data}
-        req.params,
-        {
-            $set:req.body
-        }
-    );
-    res.send('done');
-})
-
-app.post('/create', async (req,res)=>{
-    let data = new Guns(req.body);
-    const result = await data.save();
-    res.send(result);
 })
 
 app.listen(5000,()=>{
