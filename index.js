@@ -1,20 +1,21 @@
 const express = require('express');
-require('./config');
-const Guns = require('./guns');
-
+const multer = require('multer');
 const app = express();
-app.use(express.json());
 
-app.get('/guns/:key', async (req,res)=>{
-    console.log(req.params.key);
-    let data = await Guns.find({
-        '$or':[
-            {'name':{$regex:req.params.key}},
-            {'type':{$regex:req.params.key}}
-        ]
+const upload = multer({
+    storage: multer.diskStorage({
+        destination: function (req, file, cb) {
+            cb(null, 'uploads')
+        },
+        filename: function (req, file, cb) {
+            cb(null, file.fieldname + "-" + Date.now() + ".jpg")
+        }
     })
-    res.send(data);
-})
+}).single('file_name');
+
+app.post('/upload',upload,(req,res)=>{
+    res.send("File uploaded")
+});
 
 app.listen(5000,()=>{
     console.log('App running at http://127.0.0.1:5000/')
